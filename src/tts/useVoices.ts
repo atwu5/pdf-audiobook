@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { isCuratedVoice } from './voiceUtils';
 
 export interface VoiceGroups {
   zhVoices: SpeechSynthesisVoice[];
@@ -20,8 +21,12 @@ export function useVoices(): VoiceGroups {
     let cancelled = false;
     const load = () => {
       if (cancelled) return;
-      const list = window.speechSynthesis.getVoices();
-      if (list.length) setVoices(list);
+      const all = window.speechSynthesis.getVoices();
+      if (!all.length) return;
+      // 只保留精选音色（Google 國語臺灣 / 粤語香港）；设备上没有时回退全部，
+      // 避免一堆实际发声相同的选项
+      const curated = all.filter(isCuratedVoice);
+      setVoices(curated.length ? curated : all);
     };
     load();
     window.speechSynthesis.addEventListener('voiceschanged', load);

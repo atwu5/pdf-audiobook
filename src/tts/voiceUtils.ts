@@ -36,3 +36,14 @@ export function pickBestVoice(list: SpeechSynthesisVoice[]): SpeechSynthesisVoic
   if (!list.length) return null;
   return [...list].sort((a, b) => scoreVoice(b) - scoreVoice(a))[0];
 }
+
+/**
+ * 精选音色白名单：只保留 Chrome 的 Google 联网音色（國語臺灣 / 粤語香港）。
+ * 实测本地音色在部分环境下切换不生效/听起来相同，而这两个联网音色发声正常。
+ * 设备上不存在白名单音色时，调用方应回退为显示全部音色。
+ */
+export function isCuratedVoice(v: SpeechSynthesisVoice): boolean {
+  if (!/^google\b/i.test(v.name.trim())) return false;
+  const g = langGroupKey(v.lang);
+  return g === 'zh-TW' || g === 'zh-HK';
+}

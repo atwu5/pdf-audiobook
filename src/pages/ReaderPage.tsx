@@ -69,8 +69,9 @@ export default function ReaderPage() {
     const all = [...voices.zhVoices, ...voices.otherVoices];
     let v = all.find((x) => x.voiceURI === st.voiceURI) ?? undefined;
     if (!v) {
-      const zhCN = voices.zhVoices.filter((x) => langGroupKey(x.lang) === 'zh-CN');
-      v = pickBestVoice(zhCN) ?? pickBestVoice(voices.zhVoices) ?? undefined;
+      // 默认音色优先级：普通话 > 国语 > 粤语 > 任意中文
+      const byGroup = (g: string) => pickBestVoice(voices.zhVoices.filter((x) => langGroupKey(x.lang) === g));
+      v = byGroup('zh-CN') ?? byGroup('zh-TW') ?? byGroup('zh-HK') ?? pickBestVoice(voices.zhVoices) ?? undefined;
     }
     if (v) st.setVoice(v, v.voiceURI);
     // eslint-disable-next-line react-hooks/exhaustive-deps
