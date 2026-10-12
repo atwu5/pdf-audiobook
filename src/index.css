@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  @apply bg-paper text-ink antialiased;
+  overflow-x: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', 'Segoe UI', 'Noto Sans CJK SC', sans-serif;
+}
+
+::selection {
+  background: rgba(176, 113, 58, 0.25);
+}
+
+/* 句子基础样式（朗读高亮通过 DOM class 切换，避免整篇 React 重渲染） */
+.sentence {
+  cursor: pointer;
+  border-radius: 3px;
+  transition: background-color 0.15s ease;
+}
+.sentence:hover {
+  background: rgba(51, 46, 40, 0.07);
+}
+.sentence-active {
+  background: #f3d9a6;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* 进度条 */
+input[type='range'].seek {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 22px;
+  background: transparent;
+  cursor: pointer;
+}
+input[type='range'].seek::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(to right, #b0713a var(--p, 0%), #ddd2c2 var(--p, 0%));
+}
+input[type='range'].seek::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #8f5a2c;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  margin-top: -5px;
+}
+input[type='range'].seek::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: #ddd2c2;
+}
+input[type='range'].seek::-moz-range-progress {
+  height: 4px;
+  border-radius: 2px;
+  background: #b0713a;
+}
+input[type='range'].seek::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #8f5a2c;
+  border: 2px solid #fff;
+}
